@@ -12,32 +12,28 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import br.ufscar.dc.pooa.SiteNoticias;
+import br.ufscar.dc.pooa.Site;
+import br.ufscar.dc.pooa.TargetNoticia;
+import br.ufscar.dc.pooa.Csv;
 
 public class App 
 {
+	public static String getHoras(String formato) {
+		return DateTimeFormatter.ofPattern(formato).format(LocalDateTime.now());
+	}
+	
+	public static Elements pegaTitulos(Site site, TargetNoticia target) throws IOException {
+		Document doc = Jsoup.connect(site.getLink()).get();
+        Elements titles = doc.select(target.getClasse());
+		return titles;
+	}
+	
     public static void main( String[] args ) throws IOException
     {
-    	String link = "https://g1.globo.com/";
-    	String classe = "a.feed-post-link";
-    	SiteNoticias noticia = new SiteNoticias(link);
-    	noticia.setClasse(classe);
-    	String strNow = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss").format(LocalDateTime.now());
-        try (PrintWriter pw = new PrintWriter(new FileWriter(new File(String.format("dump-%s.csv", strNow))))) {
-            pw.println("Tipo;Notícia;Link");
-            Document doc = Jsoup.connect(noticia.getLink()).get();
-            Elements titles = doc.select(noticia.getClasse());
-            for (Element t : titles) {
-            	pw.print(String.format("Principal;%s;", t.text())); //e se quiser mudar para secundário, como seria o melhor código para q essa mudança fosse fácil
-            	Element parent = t; // como utilizamos a para selecionar o título, para encontrar o a, começamos pelo próprio t (que é o a) 
-                while (parent != null && !parent.tagName().equals("a")) {
-                    parent = parent.parent();
-                }
-                if (parent != null && parent.tagName().equals("a")) {
-                    pw.print(String.format("\"%s\"", parent.attr("href")));
-                }
-                pw.print("\n");
-            }
-        }
+    	Site site = new Site("https://g1.globo.com/");
+    	TargetNoticia target = new TargetNoticia("a.feed-post-link", "Principal"); //pega classe e tipo
+    	String hora = getHoras("yyyy-MM-dd-HH-mm-ss");
+    	Elements titles = pegaTitulos(site, target);
+    	Csv.criaCsv(target, hora, titles);
     }
 }
