@@ -1,6 +1,6 @@
 package br.ufscar.dc.pooa;
 
-public class Site {
+public class Site { //aqui colocamos tudo relacionado ao site, permitindo que o programa seja mais aberto a mudanças 
 	private String link;
 	
 	public String getLink() {

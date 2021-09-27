@@ -1,7 +1,5 @@
 package br.ufscar.dc.pooa;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -10,13 +8,9 @@ import org.jsoup.select.Elements;
 
 public abstract class Csv {
 	
-	public static PrintWriter criaArquivo(String nome, String hora) throws IOException {
-		return new PrintWriter(new FileWriter(new File(String.format(nome, hora))));
-	}
-	
 	public static void criaCsv(TargetNoticia target, String hora, Elements titles) throws IOException {
-		
-		try (PrintWriter pw = criaArquivo("dump-%s.csv", hora)) {
+		String nome = "dump-" + hora + ".csv";
+		try (PrintWriter pw = CriaArquivo.criaArquivo(nome)) { //essa classe possui apenas a responsabilidade de gerar o csv
             pw.println("Tipo;Notícia;Link"); 
             
             for (Element t : titles) {

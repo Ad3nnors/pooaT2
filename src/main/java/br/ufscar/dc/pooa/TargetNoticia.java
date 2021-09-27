@@ -1,6 +1,12 @@
 package br.ufscar.dc.pooa;
 
-public class TargetNoticia {
+import java.io.IOException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+public class TargetNoticia { //aqui tem tudo relacionado às notícias que se deseja extrair 
 	private String classe;
 	private String tipo;
 	
@@ -25,4 +31,9 @@ public class TargetNoticia {
 		setTipo(tipo);
 	}
 	
+	public static Elements pegaTitulos(Site site, TargetNoticia target) throws IOException {
+		Document doc = Jsoup.connect(site.getLink()).get();
+        Elements titles = doc.select(target.getClasse());
+		return titles;
+	}
 }
