@@ -21,7 +21,7 @@ Para seguir os dois primeiros princípios SOLID (Princípio da Responsabilidade 
 É necessário Java e Maven.
 
 ### Usage
-Para rodar o nosso prijeto, basta realizar a importação do git como um projeto maven e adicionar o archetype "maven-archetype-quickstart".
+Para rodar o nosso projeto, basta realizar a importação do git como um projeto maven e adicionar o archetype "maven-archetype-quickstart".
 Em seguida, abrir o terminal no projeto e executar o comando:
 ```
 mvn exec:java -Dexec.mainClass="br.ufscar.dc.pooa.App"
